@@ -4,7 +4,7 @@ import com.sun.xml.internal.ws.util.StringUtils;
 
 public class Player {
     private String playerName;
-    private int Keys;
+    private int keys, life = 3;
     
     public Player(String playerName) {
         this.playerName = StringUtils.capitalize(playerName);
@@ -15,12 +15,19 @@ public class Player {
     }
 
     public int getKeys() {
-        return Keys;
+        return keys;
     }
 
     public void addKeys() {
-        this.Keys += 1;
+        this.keys += 1;
     }
-    
-    
+
+    public int getLife() {
+        return life;
+    }
+
+    public void removeLife() {
+        this.life -= 1;
+    }
+     
 }
