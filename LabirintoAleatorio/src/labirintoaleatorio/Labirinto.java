@@ -1,5 +1,6 @@
 package labirintoaleatorio;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.Random;
 import java.lang.Math;
 
@@ -19,9 +20,6 @@ public class Labirinto {
         }
         
     }
-    
-    public static void main(String[] args) {
-        Labirinto lab = new Labirinto();
-    }
+        
     
 }
