@@ -20,6 +20,10 @@ public class Labirinto {
             return qntSala;
         }
 
+        public void setQntSala(int qntSala) {
+            this.qntSala = qntSala;
+        }
+
         public boolean isTrap() {
             return trap;
         }
@@ -72,6 +76,8 @@ public class Labirinto {
         
         this.matriz = new Sala [tamanho2][tamanho2];
         
+        Random salaRnd = new Random();
+        int verifRand;
         int cont = 1;
         int coluna = 1;
         boolean flag = false;
@@ -81,14 +87,27 @@ public class Labirinto {
             for (int j = 0; j < tamanho2; j++){
                 if (flag){
                     if (cont < (tamanho - 1) && (coluna < tamanho2)){
-                        this.matriz[i][coluna] = new Sala(1, false, false, false);
+                        verifRand = rand.nextInt(5);
+                        if (verifRand != 0){
+                            this.matriz[i][coluna] = new Sala(1, false, false, false);
+                        }
+                        else{
+                            this.matriz[i][coluna] = new Sala(0, false, false, false);
+                        }
                         cont++;
                     }
                     else{
                         cont = 1;
                     }
                     if (coluna + (tamanho - 1) < tamanho2){
-                        this.matriz[i][coluna + (tamanho - 1)] = new Sala(1, false, false, false);
+                        verifRand = rand.nextInt(5);
+                        if (verifRand != 0){
+                            this.matriz[i][coluna + (tamanho - 1)] = new Sala(1, false, false, false);
+                        }
+                        else{
+                            this.matriz[i][coluna + (tamanho - 1)] = new Sala(0, false, false, false);
+                        }
+                        
                     }
                     flag = false;
                     coluna++;
