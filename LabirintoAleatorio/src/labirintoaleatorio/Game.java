@@ -1,12 +1,7 @@
 package labirintoaleatorio;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 
 public class Game extends javax.swing.JFrame {
 
@@ -14,51 +9,72 @@ public class Game extends javax.swing.JFrame {
         initComponents();
         player = new Player(playerName);
         lblPlayerName.setText(player.getPlayerName());
-        setSize(875, 530);
+        setSize(875, 600);
         
         if (tam == 160) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 16));
+            this.x = 16;
+            this.y = 10;
         }
         else if (tam == 216) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 18));
+            this.x = 18;
+            this.y = 12;
         }
         else {
             gamePanel.setLayout(new java.awt.GridLayout(0, 20));
+            this.x = 20;
+            this.y = 14;
         }
         
-        createMatriz(tam);
+        createMatriz(this.x, this.y);
     }
     
-    public void createMatriz(int tam) {
-        this.matriz = new JLabel[tam];        
-        for (int i = 0; i < tam; i++) {
-            matriz[i] = new JLabel("" + i, SwingConstants.CENTER);
-            gamePanel.add(matriz[i]);
+    public void createMatriz(int x, int y) {
+        this.matriz = new JLabel[x][y];        
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++){
+                matriz[i][j] = new JLabel("I:" + i + "J:" + j, SwingConstants.CENTER);
+                gamePanel.add(matriz[i][j]);
+            }
             
         }
         gamePanel.updateUI();
+    }
+    
+    public void addKeys() {
+        if (player.getKeys() < 3) {
+            player.addKeys();
+            lblKeys.setText(player.getKeys() + " / 3");
+        }
+        if (player.getKeys() == 3){
+            lblKeys.setText(player.getKeys() + " / 3");
+            lblStatus.setText("Você achou todas as chaves, procure a porta.");
+        }
+        
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        topBar = new javax.swing.JPanel();
         lblPlayerName = new javax.swing.JLabel();
         lblPlayerImg = new javax.swing.JLabel();
         lblKeys = new javax.swing.JLabel();
         life1 = new javax.swing.JLabel();
         life2 = new javax.swing.JLabel();
         life3 = new javax.swing.JLabel();
-        teste = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
+        mainGame = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         gamePanel = new javax.swing.JPanel();
+        bottonBar = new javax.swing.JPanel();
+        lblStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jPanel1.setBackground(new java.awt.Color(33, 125, 25));
+        topBar.setBackground(new java.awt.Color(33, 125, 25));
 
         lblPlayerName.setForeground(java.awt.Color.white);
         lblPlayerName.setText("PlayerName");
@@ -68,6 +84,11 @@ public class Game extends javax.swing.JFrame {
         lblKeys.setForeground(new java.awt.Color(255, 255, 255));
         lblKeys.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Password_1_25px.png"))); // NOI18N
         lblKeys.setText("0 / 3");
+        lblKeys.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblKeysMouseClicked(evt);
+            }
+        });
 
         life1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png"))); // NOI18N
 
@@ -75,61 +96,51 @@ public class Game extends javax.swing.JFrame {
 
         life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png"))); // NOI18N
 
-        teste.setText("jButton1");
-        teste.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                testeActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
+        topBar.setLayout(topBarLayout);
+        topBarLayout.setHorizontalGroup(
+            topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPlayerImg)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(topBarLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(lblPlayerName))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(topBarLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(life1)
                         .addGap(0, 0, 0)
                         .addComponent(life2)
                         .addGap(0, 0, 0)
                         .addComponent(life3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 545, Short.MAX_VALUE)
-                .addComponent(teste)
-                .addGap(51, 51, 51)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblKeys)
+                .addGap(12, 12, 12))
+        );
+        topBarLayout.setVerticalGroup(
+            topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(topBarLayout.createSequentialGroup()
+                .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(topBarLayout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(lblPlayerImg))
+                    .addGroup(topBarLayout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(lblPlayerName)
+                        .addGap(2, 2, 2)
+                        .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(life1)
+                            .addComponent(life2)
+                            .addComponent(life3))))
+                .addGap(9, 9, 9))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topBarLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(lblKeys)
                 .addGap(18, 18, 18))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblPlayerImg))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(lblPlayerName)
-                        .addGap(2, 2, 2)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(life1)
-                            .addComponent(life2)
-                            .addComponent(life3)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblKeys)
-                            .addComponent(teste))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
 
-        jPanel2.setBackground(java.awt.Color.white);
+        mainGame.setBackground(java.awt.Color.white);
 
         jScrollPane1.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane1.setBorder(null);
@@ -138,50 +149,70 @@ public class Game extends javax.swing.JFrame {
         gamePanel.setLayout(new java.awt.GridLayout(0, 16));
         jScrollPane1.setViewportView(gamePanel);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
+        javax.swing.GroupLayout mainGameLayout = new javax.swing.GroupLayout(mainGame);
+        mainGame.setLayout(mainGameLayout);
+        mainGameLayout.setHorizontalGroup(
+            mainGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainGameLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        mainGameLayout.setVerticalGroup(
+            mainGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainGameLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
                 .addContainerGap())
+        );
+
+        bottonBar.setBackground(new java.awt.Color(33, 125, 25));
+
+        lblStatus.setForeground(new java.awt.Color(255, 255, 255));
+        lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Notification_20px.png"))); // NOI18N
+        lblStatus.setText("Bem vindo(a) ao Labirinto");
+        lblStatus.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
+
+        javax.swing.GroupLayout bottonBarLayout = new javax.swing.GroupLayout(bottonBar);
+        bottonBar.setLayout(bottonBarLayout);
+        bottonBarLayout.setHorizontalGroup(
+            bottonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bottonBarLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(lblStatus)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        bottonBarLayout.setVerticalGroup(
+            bottonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(bottonBarLayout.createSequentialGroup()
+                .addComponent(lblStatus)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(topBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mainGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(bottonBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(topBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(mainGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
+                .addComponent(bottonBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void testeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testeActionPerformed
-        player.addKeys();
-        lblKeys.setText(player.getKeys() + " / 3");
-        //createMatriz();
-        //JLabel label = new JLabel("Ha");
-        //gamePanel.add(label);
-        //matriz.add(label);
-        //gamePanel.updateUI();
-    }//GEN-LAST:event_testeActionPerformed
+    private void lblKeysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKeysMouseClicked
+        addKeys();
+    }//GEN-LAST:event_lblKeysMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -216,19 +247,21 @@ public class Game extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel bottonBar;
     private javax.swing.JPanel gamePanel;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblKeys;
     private javax.swing.JLabel lblPlayerImg;
     private javax.swing.JLabel lblPlayerName;
+    private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel life1;
     private javax.swing.JLabel life2;
     private javax.swing.JLabel life3;
-    private javax.swing.JButton teste;
+    private javax.swing.JPanel mainGame;
+    private javax.swing.JPanel topBar;
     // End of variables declaration//GEN-END:variables
     private Labirinto lab;
     private Player player;
-    private JLabel matriz[];
+    private JLabel matriz[][];
+    private int x, y;
 }
