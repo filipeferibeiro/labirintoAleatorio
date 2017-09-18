@@ -1,5 +1,6 @@
 package labirintoaleatorio;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
@@ -9,32 +10,36 @@ public class Game extends javax.swing.JFrame {
         initComponents();
         player = new Player(playerName);
         lblPlayerName.setText(player.getPlayerName());
-        setSize(875, 600);
+        setSize(890, 640);
+        setExtendedState(MAXIMIZED_BOTH);
+        //setUndecorated(true);
+        //frame.setVisible(true);
         
         if (tam == 160) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 16));
-            this.x = 16;
-            this.y = 10;
+            this.x = 10;
+            this.y = 16;
         }
         else if (tam == 216) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 18));
-            this.x = 18;
-            this.y = 12;
+            this.x = 12;
+            this.y = 18;
         }
         else {
             gamePanel.setLayout(new java.awt.GridLayout(0, 20));
-            this.x = 20;
-            this.y = 14;
+            this.x = 14;
+            this.y = 20;
         }
-        
         createMatriz(this.x, this.y);
+        gamePanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
     }
     
     public void createMatriz(int x, int y) {
         this.matriz = new JLabel[x][y];        
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < y; j++){
-                matriz[i][j] = new JLabel("I:" + i + "J:" + j, SwingConstants.CENTER);
+                matriz[i][j] = new JLabel();
+                matriz[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
                 gamePanel.add(matriz[i][j]);
             }
             
@@ -72,6 +77,7 @@ public class Game extends javax.swing.JFrame {
         lblStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setResizable(false);
 
         topBar.setBackground(new java.awt.Color(33, 125, 25));
@@ -80,6 +86,11 @@ public class Game extends javax.swing.JFrame {
         lblPlayerName.setText("PlayerName");
 
         lblPlayerImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerIMG.png"))); // NOI18N
+        lblPlayerImg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPlayerImgMouseClicked(evt);
+            }
+        });
 
         lblKeys.setForeground(new java.awt.Color(255, 255, 255));
         lblKeys.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Password_1_25px.png"))); // NOI18N
@@ -154,15 +165,15 @@ public class Game extends javax.swing.JFrame {
         mainGameLayout.setHorizontalGroup(
             mainGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainGameLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 855, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
                 .addContainerGap())
         );
         mainGameLayout.setVerticalGroup(
             mainGameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(mainGameLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 427, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -213,6 +224,10 @@ public class Game extends javax.swing.JFrame {
     private void lblKeysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKeysMouseClicked
         addKeys();
     }//GEN-LAST:event_lblKeysMouseClicked
+
+    private void lblPlayerImgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPlayerImgMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_lblPlayerImgMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
