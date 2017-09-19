@@ -46,24 +46,23 @@ public class Labirinto {
         
     }
     
+    private int [][] matriz;
+    private Sala[] salas;
     
-    private Sala [][] matriz;
-    
-    public Labirinto () {
+    public Labirinto (int tam) {
+        int tamanho, tamanho2;
         Random rand = new Random();
-        int tamanho = rand.nextInt(3);
-        int tamanho2;
-        
-        switch(tamanho){
-            case 0:
+               
+        switch(tam){
+            case 160:
                 tamanho = 16;
                 tamanho2 = 160; // 10 x 16
                 break;
-            case 1:
+            case 216:
                 tamanho = 18;
                 tamanho2 = 216; // 12 x 18
                 break;
-            case 2:
+            case 280:
                 tamanho = 20;
                 tamanho2 = 280; // 14 x 20
                 break;
@@ -72,72 +71,69 @@ public class Labirinto {
                 tamanho2 = 280;
                 break;
         }
+        this.salas = new Sala[tamanho2];
+        this.matriz = new int [tamanho2][tamanho2];
         
-        
-        this.matriz = new Sala [tamanho2][tamanho2];
-        
-        Random salaRnd = new Random();
+        //Random salaRnd = new Random();
         int verifRand;
         int cont = 1;
-        int coluna = 1;
+        int contSalas = 0;
+        //int coluna = 1;
         boolean flag = false;
         for (int i = 0; i < tamanho2; i++) {
-            System.out.println("\n");
+            salas[i] = new Sala(contSalas, false, false, false);
+            //System.out.println("\n");
             flag = true;
-            for (int j = 0; j < tamanho2; j++){
+            for (int j = 1; j < tamanho2; j++){
                 if (flag){
-                    if (cont < (tamanho - 1) && (coluna < tamanho2)){
+                    if (cont < (tamanho - 1) && (j < tamanho2)){
                         verifRand = rand.nextInt(5);
                         if (verifRand != 0){
-                            this.matriz[i][coluna] = new Sala(1, false, false, false);
+                            this.matriz[i][j] = 1;
+                            contSalas += 1;
                         }
                         else{
-                            this.matriz[i][coluna] = new Sala(0, false, false, false);
+                            this.matriz[i][j] = 0;
                         }
                         cont++;
                     }
                     else{
                         cont = 1;
                     }
-                    if (coluna + (tamanho - 1) < tamanho2){
+                    if (j + (tamanho - 1) < tamanho2){
                         verifRand = rand.nextInt(5);
                         if (verifRand != 0){
-                            this.matriz[i][coluna + (tamanho - 1)] = new Sala(1, false, false, false);
+                            this.matriz[i][j + (tamanho - 1)] = 1;
+                            contSalas += 1;
                         }
                         else{
-                            this.matriz[i][coluna + (tamanho - 1)] = new Sala(0, false, false, false);
+                            this.matriz[i][j + (tamanho - 1)] = 0;
                         }
                         
                     }
                     flag = false;
-                    coluna++;
-                }
-                /*else if(j != cont && this.matriz[i][j] == null){
-                    //this.matriz[i][j] = new Sala(0, false, false, false);
-                }*/
-                if (this.matriz[i][j] != null){
-                    System.out.print(this.matriz[i][j].qntSala);
-                }
-                else{
-                    System.out.print("0");
-                }
-                
-                
-                /*if (cont == tamanho){
-                    matriz[i][j]
-                    
-                }*/
-                
+                }              
             }
+            for (int k = 0; k < tamanho2; k++){
+                if(this.matriz[k][i] == 1){
+                    contSalas += 1;
+                }
+            }
+            salas[i].setQntSala(contSalas);
+            contSalas = 0;
         }
-        
-        System.out.println("\n\n\n" + tamanho + " tamanho²: " + tamanho2);
+
     }
     
-    
-    
-    public static void main(String[] args) {
-        Labirinto lab = new Labirinto();
+    public int[][] getLabirinto() {
+        return this.matriz;
     }
     
+    public Sala getSala(int i) {
+        return this.salas[i];
+    }
+    
+    public Sala[] getSalas() {
+        return this.salas;
+    }
 }

@@ -3,6 +3,7 @@ package labirintoaleatorio;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
+import labirintoaleatorio.Labirinto.Sala;
 
 public class Game extends javax.swing.JFrame {
 
@@ -12,8 +13,6 @@ public class Game extends javax.swing.JFrame {
         lblPlayerName.setText(player.getPlayerName());
         setSize(890, 640);
         setExtendedState(MAXIMIZED_BOTH);
-        //setUndecorated(true);
-        //frame.setVisible(true);
         
         if (tam == 160) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 16));
@@ -30,19 +29,39 @@ public class Game extends javax.swing.JFrame {
             this.x = 14;
             this.y = 20;
         }
-        createMatriz(this.x, this.y);
-        gamePanel.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        lab = new Labirinto(tam);
+        createMatriz(tam); 
+        
+        
     }
     
-    public void createMatriz(int x, int y) {
-        this.matriz = new JLabel[x][y];        
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++){
-                matriz[i][j] = new JLabel();
-                matriz[i][j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
-                gamePanel.add(matriz[i][j]);
+    public void createMatriz(int tam) {
+        Sala[] salas = lab.getSalas();
+        this.matriz = new JLabel[tam];
+        int cont = 0;
+        for (int i = 0; i < tam; i++) {
+            //System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
+            matriz[i] = new JLabel();
+            if (lab.getSala(i).getQntSala() == 0) {
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
             }
-            
+            else if (lab.getSala(i).getQntSala() == 1){
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-baixo.png"))); 
+            }
+            else if (lab.getSala(i).getQntSala() == 2){
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-cb.png"))); 
+            }
+            else if (lab.getSala(i).getQntSala() == 3){
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-b.png"))); 
+            }
+            else if (lab.getSala(i).getQntSala() == 4){
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
+            }
+            else {
+                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
+            }
+            //matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
+            gamePanel.add(matriz[i]);            
         }
         gamePanel.updateUI();
     }
@@ -75,6 +94,7 @@ public class Game extends javax.swing.JFrame {
         gamePanel = new javax.swing.JPanel();
         bottonBar = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
+        lblQuit = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -184,6 +204,15 @@ public class Game extends javax.swing.JFrame {
         lblStatus.setText("Bem vindo(a) ao Labirinto");
         lblStatus.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 2, 2, 2));
 
+        lblQuit.setForeground(new java.awt.Color(255, 255, 255));
+        lblQuit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Exit_20px.png"))); // NOI18N
+        lblQuit.setText("Sair");
+        lblQuit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblQuitMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout bottonBarLayout = new javax.swing.GroupLayout(bottonBar);
         bottonBar.setLayout(bottonBarLayout);
         bottonBarLayout.setHorizontalGroup(
@@ -191,12 +220,16 @@ public class Game extends javax.swing.JFrame {
             .addGroup(bottonBarLayout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addComponent(lblStatus)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblQuit)
+                .addGap(5, 5, 5))
         );
         bottonBarLayout.setVerticalGroup(
             bottonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(bottonBarLayout.createSequentialGroup()
-                .addComponent(lblStatus)
+                .addGroup(bottonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblStatus)
+                    .addComponent(lblQuit))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -226,8 +259,12 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_lblKeysMouseClicked
 
     private void lblPlayerImgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPlayerImgMouseClicked
-        System.exit(0);
+        
     }//GEN-LAST:event_lblPlayerImgMouseClicked
+
+    private void lblQuitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuitMouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_lblQuitMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -268,6 +305,7 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel lblKeys;
     private javax.swing.JLabel lblPlayerImg;
     private javax.swing.JLabel lblPlayerName;
+    private javax.swing.JLabel lblQuit;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel life1;
     private javax.swing.JLabel life2;
@@ -277,6 +315,7 @@ public class Game extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private Labirinto lab;
     private Player player;
-    private JLabel matriz[][];
+    private JLabel matriz[];
+    private Sala salas[];
     private int x, y;
 }
