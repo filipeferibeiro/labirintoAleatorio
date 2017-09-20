@@ -12,6 +12,7 @@ public class Game extends javax.swing.JFrame {
         //Criando o Objeto player com o nome dado no Home.
         player = new Player(playerName);
         lblPlayerName.setText(player.getPlayerName());
+        this.tam = tam;
         //Para setando a janela com o valor mínimo de 890x640.
         setSize(890, 640);
         //Colocando jogo em tela cheia.
@@ -47,6 +48,8 @@ public class Game extends javax.swing.JFrame {
         this.matriz = new JLabel[tam];
         this.personagem = new JLabel[tam];
         this.trapKeyDor = new JLabel[tam];
+        
+        gamePanel.removeAll();
         
         int cont = 0;
         for (int i = 0; i < tam; i++) {
@@ -218,6 +221,7 @@ public class Game extends javax.swing.JFrame {
         bottonBar = new javax.swing.JPanel();
         lblStatus = new javax.swing.JLabel();
         lblQuit = new javax.swing.JLabel();
+        lblRefresh = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -347,6 +351,15 @@ public class Game extends javax.swing.JFrame {
             }
         });
 
+        lblRefresh.setForeground(new java.awt.Color(255, 255, 255));
+        lblRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Refresh_20px.png"))); // NOI18N
+        lblRefresh.setText("Atualizar");
+        lblRefresh.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblRefreshMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout bottonBarLayout = new javax.swing.GroupLayout(bottonBar);
         bottonBar.setLayout(bottonBarLayout);
         bottonBarLayout.setHorizontalGroup(
@@ -355,6 +368,8 @@ public class Game extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(lblStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lblRefresh)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblQuit)
                 .addGap(5, 5, 5))
         );
@@ -363,7 +378,8 @@ public class Game extends javax.swing.JFrame {
             .addGroup(bottonBarLayout.createSequentialGroup()
                 .addGroup(bottonBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblStatus)
-                    .addComponent(lblQuit))
+                    .addComponent(lblQuit)
+                    .addComponent(lblRefresh))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -432,6 +448,21 @@ public class Game extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formKeyPressed
 
+    private void lblRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblRefreshMouseClicked
+        //Criando o Labirinto do tamanho da dificuldade escolhida.
+        lab = new Labirinto(tam);
+        //Criando a matriz da Interface Gráfica.
+        createMatriz(tam); 
+        //Resetando os valores para nome, chaves e vidas.
+        player = new Player(player.getPlayerName());
+        lblKeys.setText(player.getKeys() + " / 3");
+        life1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+        life2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+        life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+        
+        personagem[player.getPos()].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
+    }//GEN-LAST:event_lblRefreshMouseClicked
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -473,6 +504,7 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JLabel lblPlayerImg;
     private javax.swing.JLabel lblPlayerName;
     private javax.swing.JLabel lblQuit;
+    private javax.swing.JLabel lblRefresh;
     private javax.swing.JLabel lblStatus;
     private javax.swing.JLabel life1;
     private javax.swing.JLabel life2;
@@ -486,5 +518,5 @@ public class Game extends javax.swing.JFrame {
     private JLabel personagem[];
     private JLabel trapKeyDor[];
     private Sala salas[];
-    private int x, y;
+    private int x, y, tam;
 }

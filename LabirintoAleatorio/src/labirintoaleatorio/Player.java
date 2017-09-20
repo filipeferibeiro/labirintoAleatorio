@@ -26,6 +26,14 @@ public class Player {
         return keys;
     }
 
+    public void setKeys(int keys) {
+        this.keys = keys;
+    }
+
+    public void setLife(int life) {
+        this.life = life;
+    }
+
     public void addKeys() {
         this.keys += 1;
     }
