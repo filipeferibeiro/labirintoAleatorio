@@ -112,9 +112,12 @@ public class Labirinto {
                         
                     }
                     flag = false;
-                }              
+                }
+                else{
+                    break;
+                }
             }
-            for (int k = 0; k < tamanho2; k++){
+            for (int k = 0; k < i; k++){
                 if(this.matriz[k][i] == 1){
                     contSalas += 1;
                 }

@@ -40,7 +40,7 @@ public class Game extends javax.swing.JFrame {
         this.matriz = new JLabel[tam];
         int cont = 0;
         for (int i = 0; i < tam; i++) {
-            //System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
+            System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
             matriz[i] = new JLabel();
             if (lab.getSala(i).getQntSala() == 0) {
                 matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
