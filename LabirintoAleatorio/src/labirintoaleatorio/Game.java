@@ -40,26 +40,67 @@ public class Game extends javax.swing.JFrame {
         this.matriz = new JLabel[tam];
         int cont = 0;
         for (int i = 0; i < tam; i++) {
-            System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
+            //System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
             matriz[i] = new JLabel();
             if (lab.getSala(i).getQntSala() == 0) {
                 matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
             }
+            
             else if (lab.getSala(i).getQntSala() == 1){
-                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-baixo.png"))); 
+                if (lab.getSala(i).isUp()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-c.png")));
+                }
+                else if (lab.getSala(i).isRight()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-d.png")));
+                }
+                else if (lab.getSala(i).isDown()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-b.png")));
+                }
+                else if (lab.getSala(i).isLeft()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-e.png")));
+                }
             }
+            
             else if (lab.getSala(i).getQntSala() == 2){
-                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-cb.png"))); 
+                if (lab.getSala(i).isUp() && lab.getSala(i).isRight()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-be.png")));
+                }
+                else if (lab.getSala(i).isUp() && lab.getSala(i).isDown()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-cb.png")));
+                }
+                else if (lab.getSala(i).isUp() && lab.getSala(i).isLeft()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-bd.png")));
+                }
+                else if (lab.getSala(i).isRight()&& lab.getSala(i).isDown()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-ce.png")));
+                }
+                else if (lab.getSala(i).isRight()&& lab.getSala(i).isLeft()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-ed.png")));
+                }
+                else if (lab.getSala(i).isDown()&& lab.getSala(i).isLeft()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/2-cd.png")));
+                }
             }
+            
             else if (lab.getSala(i).getQntSala() == 3){
-                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/3-b.png"))); 
+                if (!lab.getSala(i).isUp()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-cima.png")));
+                }
+                else if (!lab.getSala(i).isRight()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-dir.png")));
+                }
+                else if (!lab.getSala(i).isDown()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-baixo.png")));
+                }
+                else if (!lab.getSala(i).isLeft()) {
+                    matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/1-esq.png")));
+                }
             }
+            
             else if (lab.getSala(i).getQntSala() == 4){
                 matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
             }
-            else {
-                matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
-            }
+            
             //matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
             gamePanel.add(matriz[i]);            
         }

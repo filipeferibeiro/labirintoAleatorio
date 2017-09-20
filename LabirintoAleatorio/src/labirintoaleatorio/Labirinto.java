@@ -1,13 +1,11 @@
 package labirintoaleatorio;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import java.util.Random;
-import java.lang.Math;
 
 public class Labirinto {
     public class Sala {
         int qntSala;
-        boolean trap, key, exit;
+        boolean trap, key, exit, up = false, down = false, left = false, right = false;
         
         public Sala(int qntSala, boolean trap, boolean key, boolean exit){
             this.qntSala = qntSala;
@@ -16,6 +14,40 @@ public class Labirinto {
             this.exit = exit;
         }
 
+        public boolean isUp() {
+            return up;
+        }
+
+        public void setUp(boolean up) {
+            this.up = up;
+        }
+
+        public boolean isDown() {
+            return down;
+        }
+
+        public void setDown(boolean down) {
+            this.down = down;
+        }
+
+        public boolean isLeft() {
+            return left;
+        }
+
+        public void setLeft(boolean left) {
+            this.left = left;
+        }
+
+        public boolean isRight() {
+            return right;
+        }
+
+        public void setRight(boolean right) {
+            this.right = right;
+        }
+        
+        
+        
         public int getQntSala() {
             return qntSala;
         }
@@ -73,45 +105,46 @@ public class Labirinto {
         }
         this.salas = new Sala[tamanho2];
         this.matriz = new int [tamanho2][tamanho2];
-        
-        //Random salaRnd = new Random();
+                
         int verifRand;
         int cont = 1;
+        int coluna = 1;
         int contSalas = 0;
-        //int coluna = 1;
         boolean flag = false;
         for (int i = 0; i < tamanho2; i++) {
-            salas[i] = new Sala(contSalas, false, false, false);
-            //System.out.println("\n");
+            salas[i] = new Sala(contSalas, false, false, false);           
             flag = true;
             for (int j = 1; j < tamanho2; j++){
                 if (flag){
-                    if (cont < (tamanho - 1) && (j < tamanho2)){
-                        verifRand = rand.nextInt(5);
+                    if (cont <= (tamanho - 1) && (coluna < tamanho2)){
+                        verifRand = rand.nextInt(4);
                         if (verifRand != 0){
-                            this.matriz[i][j] = 1;
+                            this.matriz[i][coluna] = 1;
                             contSalas += 1;
+                            this.salas[i].setRight(true);
                         }
                         else{
-                            this.matriz[i][j] = 0;
+                            this.matriz[i][coluna] = 0;
                         }
                         cont++;
                     }
                     else{
                         cont = 1;
                     }
-                    if (j + (tamanho - 1) < tamanho2){
-                        verifRand = rand.nextInt(5);
+                    if (coluna + (tamanho - 1) < tamanho2){
+                        verifRand = rand.nextInt(3);
                         if (verifRand != 0){
-                            this.matriz[i][j + (tamanho - 1)] = 1;
+                            this.matriz[i][coluna + (tamanho - 1)] = 1;
                             contSalas += 1;
+                            this.salas[i].setDown(true);
                         }
                         else{
-                            this.matriz[i][j + (tamanho - 1)] = 0;
+                            this.matriz[i][coluna + (tamanho - 1)] = 0;
                         }
                         
                     }
                     flag = false;
+                    coluna++;
                 }
                 else{
                     break;
@@ -119,11 +152,24 @@ public class Labirinto {
             }
             for (int k = 0; k < i; k++){
                 if(this.matriz[k][i] == 1){
+                    if (i - k == 1) {
+                        this.salas[i].setLeft(true);
+                    }
+                    else {
+                        this.salas[i].setUp(true);
+                    }
                     contSalas += 1;
                 }
             }
             salas[i].setQntSala(contSalas);
             contSalas = 0;
+        }
+        
+        for (int i = 0; i < tamanho2; i++) {
+            for (int j = 0; j< tamanho2; j++) {
+                System.out.print(this.matriz[i][j]);
+            }
+            System.out.print("\n");
         }
 
     }
@@ -138,5 +184,86 @@ public class Labirinto {
     
     public Sala[] getSalas() {
         return this.salas;
+    }
+    
+    /*def conexo(self, i = 0):
+        if i <= (len(self.Matriz) - 2):
+            if 1 not in self.Matriz[i]:
+                coluna = self.coluna()
+                if coluna == True:
+                    return True
+                else:
+                    return False
+
+            a = self.conexo(i+1)
+            if a == True:
+                return True
+            else:
+                return False
+
+        else:
+            return True
+
+    def coluna(self, j = 1):
+        lista = []
+        for x in range(len(self.Matriz)):
+            if self.Matriz[x][j] == 1:
+                lista.append(1)
+        if lista == []:
+            return False
+        elif j == len(self.Matriz):
+            return True
+        else:
+            a = self.coluna(j + 1)
+            if a == True:
+                return True
+            else:
+                return False
+    */
+    
+    public boolean coluna(int j, int tam) {
+        boolean flag = false;
+        boolean coluna = false;
+        for (int x = 0; x < tam; x++){
+            if (this.matriz[x][j] == 1){
+                flag = true;
+            }
+        }
+        if (!flag) {
+            return false;
+        }
+        else if (j == tam) {
+            return true;
+        }
+        else {
+            coluna = coluna(j + 1, tam);
+            return coluna;
+        }
+    }
+    
+    public boolean conexo(int i, int tam) {
+        boolean flag = false;
+        boolean coluna = false;
+        boolean conexo = false;
+        if (i <= tam - 2){
+            for (int j = 0; j < tam; j++){
+                if (this.matriz[i][j] == 1){
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                coluna = coluna(1 , tam);
+                return coluna;
+            }
+            conexo = conexo(i + 1, tam);
+            return conexo;
+        }
+        else {
+            return true;
+        }
+    }
+    
+    public static void main(String[] args) {
+        Labirinto lab = new Labirinto(160);
     }
 }
