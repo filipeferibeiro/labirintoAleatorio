@@ -164,14 +164,6 @@ public class Labirinto {
             salas[i].setQntSala(contSalas);
             contSalas = 0;
         }
-        
-        for (int i = 0; i < tamanho2; i++) {
-            for (int j = 0; j< tamanho2; j++) {
-                System.out.print(this.matriz[i][j]);
-            }
-            System.out.print("\n");
-        }
-
     }
     
     public int[][] getLabirinto() {
@@ -185,41 +177,6 @@ public class Labirinto {
     public Sala[] getSalas() {
         return this.salas;
     }
-    
-    /*def conexo(self, i = 0):
-        if i <= (len(self.Matriz) - 2):
-            if 1 not in self.Matriz[i]:
-                coluna = self.coluna()
-                if coluna == True:
-                    return True
-                else:
-                    return False
-
-            a = self.conexo(i+1)
-            if a == True:
-                return True
-            else:
-                return False
-
-        else:
-            return True
-
-    def coluna(self, j = 1):
-        lista = []
-        for x in range(len(self.Matriz)):
-            if self.Matriz[x][j] == 1:
-                lista.append(1)
-        if lista == []:
-            return False
-        elif j == len(self.Matriz):
-            return True
-        else:
-            a = self.coluna(j + 1)
-            if a == True:
-                return True
-            else:
-                return False
-    */
     
     public boolean coluna(int j, int tam) {
         boolean flag = false;
@@ -261,9 +218,5 @@ public class Labirinto {
         else {
             return true;
         }
-    }
-    
-    public static void main(String[] args) {
-        Labirinto lab = new Labirinto(160);
     }
 }

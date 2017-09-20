@@ -6,7 +6,7 @@ public class Home extends javax.swing.JFrame {
 
     public Home() {
         initComponents();
-        this.setLocationRelativeTo(null);
+        this.setLocationRelativeTo(null); //Seta a tela do menu no meio da tela.
     }
 
     @SuppressWarnings("unchecked")
@@ -195,9 +195,6 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btJogarMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

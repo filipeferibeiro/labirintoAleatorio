@@ -4,7 +4,15 @@ import com.sun.xml.internal.ws.util.StringUtils;
 
 public class Player {
     private String playerName;
-    private int keys, life = 3;
+    private int keys, life = 3, pos = 20;
+
+    public int getPos() {
+        return pos;
+    }
+
+    public void setPos(int pos) {
+        this.pos = pos;
+    }
     
     public Player(String playerName) {
         this.playerName = StringUtils.capitalize(playerName);

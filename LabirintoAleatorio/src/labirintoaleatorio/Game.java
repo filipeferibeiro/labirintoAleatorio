@@ -1,19 +1,23 @@
 package labirintoaleatorio;
 
-import javax.swing.BorderFactory;
+import java.awt.event.KeyEvent;
 import javax.swing.JLabel;
-import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
 import labirintoaleatorio.Labirinto.Sala;
 
 public class Game extends javax.swing.JFrame {
 
     public Game(String playerName, int tam) {
         initComponents();
+        //Criando o Objeto player com o nome dado no Home.
         player = new Player(playerName);
         lblPlayerName.setText(player.getPlayerName());
+        //Para setando a janela com o valor mínimo de 890x640.
         setSize(890, 640);
+        //Colocando jogo em tela cheia.
         setExtendedState(MAXIMIZED_BOTH);
         
+        //Definindo tamanho dos grids baseado na dificuldade escolhida no Home.
         if (tam == 160) {
             gamePanel.setLayout(new java.awt.GridLayout(0, 16));
             this.x = 10;
@@ -29,19 +33,31 @@ public class Game extends javax.swing.JFrame {
             this.x = 14;
             this.y = 20;
         }
+        //Criando o Labirinto do tamanho da dificuldade escolhida.
         lab = new Labirinto(tam);
+        //Criando a matriz da Interface Gráfica.
         createMatriz(tam); 
-        
-        
+        personagem[player.getPos()].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
     }
     
     public void createMatriz(int tam) {
         Sala[] salas = lab.getSalas();
+        
+        //Criação dos Arrays baseado no tamanho de jogo.
         this.matriz = new JLabel[tam];
+        this.personagem = new JLabel[tam];
+        this.trapKeyDor = new JLabel[tam];
+        
         int cont = 0;
         for (int i = 0; i < tam; i++) {
-            //System.out.println(lab.getSala(i).getQntSala() + ""); //Printa a quantidade de salas
+            //Alocação dos Arrays de MatrizDeJogo, do Personagem e das Armadilhas, Chaves e Portas
             matriz[i] = new JLabel();
+            personagem[i] = new JLabel();
+            trapKeyDor[i] = new JLabel();
+            //Setando tanto a matriz de jogo, quanto a matriz de armadilhas como uma espécie de "Panel"
+            matriz[i].setLayout(new java.awt.CardLayout(10, 0));
+            trapKeyDor[i].setLayout(new java.awt.CardLayout(0, 0));
+            
             if (lab.getSala(i).getQntSala() == 0) {
                 matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/back.png"))); 
             }
@@ -100,10 +116,18 @@ public class Game extends javax.swing.JFrame {
             else if (lab.getSala(i).getQntSala() == 4){
                 matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
             }
-            
-            //matriz[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/def/null.png"))); 
+            //Adicionando a cada item de armadilha um campo para o personagem.
+            trapKeyDor[i].add(personagem[i]);
+            trapKeyDor[i].revalidate();
+            trapKeyDor[i].repaint();  
+            //Adicionando a cada item da matriz de jogo um campo para armadilha.
+            matriz[i].add(trapKeyDor[i]);
+            matriz[i].revalidate();
+            matriz[i].repaint();
+            //Adicionando a Grid cada item da matriz.
             gamePanel.add(matriz[i]);            
         }
+        //Atualizando a interface.
         gamePanel.updateUI();
     }
     
@@ -116,7 +140,64 @@ public class Game extends javax.swing.JFrame {
             lblKeys.setText(player.getKeys() + " / 3");
             lblStatus.setText("Você achou todas as chaves, procure a porta.");
         }
-        
+    }
+    
+    public void removeLife() {
+        player.removeLife();
+        if (player.getLife() == 2) {
+            life1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+            life2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+            life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+        }
+        else if (player.getLife() == 1) {
+            life1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
+            life2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+            life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+        }
+        else if (player.getLife() == 0) {
+            life1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+            life2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+            life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_2.png")));
+            int n = JOptionPane.showConfirmDialog(null, "Suas vidas acabaram :(, deseja jogar novamente?", "Fim de Jogo", JOptionPane.YES_NO_OPTION);
+            if (n == 0) {
+                this.setVisible(false);
+                new Home().setVisible(true);
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Volte sempre.");
+                System.exit(0);
+            }
+        }
+    }
+    
+    public void doorFounded(int i) {
+        lblStatus.setText("Parabéns, você achou a porta!");
+        trapKeyDor[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Door_30px.png")));
+        lblDoorStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Door_25px.png")));
+    }
+    
+    public void trapFound (int i) {
+        trapKeyDor[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Prisoner_30px.png")));
+        JOptionPane.showMessageDialog(null, "Você caiu em uma armadilha e perdeu uma vida, que pena :(.");
+        removeLife();
+    }
+    
+    public void movePlayer(int i, String position) {
+        int pos = player.getPos();
+        personagem[pos].setIcon(null);
+        if (position.equals("U")) {
+            personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerU.png")));
+        }
+        else if (position.equals("D")) {
+            personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
+        }
+        else if (position.equals("L")) {
+            personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerL.png")));
+        }
+        else if (position.equals("R")) {
+            personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerR.png")));
+        }
+        player.setPos(i);
     }
 
     @SuppressWarnings("unchecked")
@@ -130,6 +211,7 @@ public class Game extends javax.swing.JFrame {
         life1 = new javax.swing.JLabel();
         life2 = new javax.swing.JLabel();
         life3 = new javax.swing.JLabel();
+        lblDoorStatus = new javax.swing.JLabel();
         mainGame = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         gamePanel = new javax.swing.JPanel();
@@ -140,6 +222,11 @@ public class Game extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         topBar.setBackground(new java.awt.Color(33, 125, 25));
 
@@ -168,6 +255,8 @@ public class Game extends javax.swing.JFrame {
 
         life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png"))); // NOI18N
 
+        lblDoorStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Door_25pxbw.png"))); // NOI18N
+
         javax.swing.GroupLayout topBarLayout = new javax.swing.GroupLayout(topBar);
         topBar.setLayout(topBarLayout);
         topBarLayout.setHorizontalGroup(
@@ -185,8 +274,10 @@ public class Game extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(life2)
                         .addGap(0, 0, 0)
-                        .addComponent(life3)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(life3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblDoorStatus)))
+                .addGap(13, 13, 13)
                 .addComponent(lblKeys)
                 .addGap(12, 12, 12))
         );
@@ -208,7 +299,9 @@ public class Game extends javax.swing.JFrame {
                 .addGap(9, 9, 9))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, topBarLayout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(lblKeys)
+                .addGroup(topBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblKeys)
+                    .addComponent(lblDoorStatus))
                 .addGap(18, 18, 18))
         );
 
@@ -300,12 +393,44 @@ public class Game extends javax.swing.JFrame {
     }//GEN-LAST:event_lblKeysMouseClicked
 
     private void lblPlayerImgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPlayerImgMouseClicked
-        
+        doorFounded(2);
     }//GEN-LAST:event_lblPlayerImgMouseClicked
 
     private void lblQuitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuitMouseClicked
         System.exit(0);
     }//GEN-LAST:event_lblQuitMouseClicked
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        salas = lab.getSalas();
+        //Enter
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            //movePlayer(player.getPos() + 1);
+        }
+        //Seta Cima
+        if (evt.getKeyCode() == KeyEvent.VK_UP) {
+            if (salas[player.getPos()].isUp()) {
+                movePlayer(player.getPos() - this.y, "U");
+            }
+        }
+        //Seta Baixo
+        if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
+            if (salas[player.getPos()].isDown()) {
+                movePlayer(player.getPos() + this.y, "D");
+            }
+        }
+        //Seta Esquerda
+        if (evt.getKeyCode() == KeyEvent.VK_LEFT) {
+            if (salas[player.getPos()].isLeft()) {
+                movePlayer(player.getPos() - 1, "L");
+            }
+        }
+        //Seta Direita
+        if (evt.getKeyCode() == KeyEvent.VK_RIGHT) {
+            if (salas[player.getPos()].isRight()) {
+                movePlayer(player.getPos() + 1, "R");
+            }
+        }
+    }//GEN-LAST:event_formKeyPressed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -343,6 +468,7 @@ public class Game extends javax.swing.JFrame {
     private javax.swing.JPanel bottonBar;
     private javax.swing.JPanel gamePanel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDoorStatus;
     private javax.swing.JLabel lblKeys;
     private javax.swing.JLabel lblPlayerImg;
     private javax.swing.JLabel lblPlayerName;
@@ -357,6 +483,8 @@ public class Game extends javax.swing.JFrame {
     private Labirinto lab;
     private Player player;
     private JLabel matriz[];
+    private JLabel personagem[];
+    private JLabel trapKeyDor[];
     private Sala salas[];
     private int x, y;
 }
