@@ -146,6 +146,7 @@ public class Game extends javax.swing.JFrame {
         if (player.getKeys() == 3){
             lblKeys.setText(player.getKeys() + " / 3");
             lblStatus.setText("Você achou todas as chaves, procure a porta.");
+            lblDoorStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Door_25px.png")));
         }
     }
     
@@ -191,6 +192,7 @@ public class Game extends javax.swing.JFrame {
     
     public void movePlayer(int i, String position) {
         int pos = player.getPos();
+        Sala salas[] = lab.getSalas();
         personagem[pos].setIcon(null);
         if (position.equals("U")) {
             personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerU.png")));
@@ -205,6 +207,11 @@ public class Game extends javax.swing.JFrame {
             personagem[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerR.png")));
         }
         player.setPos(i);
+        
+        if (salas[i].isTrap()) {
+            trapFound(i);
+            salas[i].setTrap(false);
+        }
     }
     
     public void putKeys() {
