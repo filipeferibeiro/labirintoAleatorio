@@ -1,6 +1,7 @@
 package labirintoaleatorio;
 
 import java.awt.event.KeyEvent;
+import java.util.Random;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import labirintoaleatorio.Labirinto.Sala;
@@ -38,7 +39,10 @@ public class Game extends javax.swing.JFrame {
         lab = new Labirinto(tam);
         //Criando a matriz da Interface Gráfica.
         createMatriz(tam); 
-        personagem[player.getPos()].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
+        putKeys();
+        putTrap();
+        putDoor();
+        putPlayer();
     }
     
     public void createMatriz(int tam) {
@@ -202,6 +206,46 @@ public class Game extends javax.swing.JFrame {
         }
         player.setPos(i);
     }
+    
+    public void putKeys() {
+        salas = lab.getSalas();
+        int j;
+        for (int i = 0; i < 3; i++) {
+            Random rand = new Random();
+            j = rand.nextInt(this.tam);
+            salas[j].setKey(true);
+            trapKeyDor[j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Password_1_30px.png")));
+        }
+    }
+    
+    public void putTrap() {
+        salas = lab.getSalas();
+        int j;
+        for (int i = 0; i < 10; i++) {
+            Random rand = new Random();
+            j = rand.nextInt(this.tam);
+            salas[j].setTrap(true);            
+        }
+    }
+    
+    public void putDoor() {
+        salas = lab.getSalas();
+        int j;
+        Random rand = new Random();
+        j = rand.nextInt(this.tam);
+        salas[j].setExit(true);
+        trapKeyDor[j].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Door_30px.png")));
+    }
+    
+    public void putPlayer() {
+        salas = lab.getSalas();
+        int j;
+        Random rand = new Random();
+        j = rand.nextInt(this.tam);
+        player.setPos(j);
+        personagem[player.getPos()].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
+    }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -405,11 +449,11 @@ public class Game extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void lblKeysMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblKeysMouseClicked
-        addKeys();
+        
     }//GEN-LAST:event_lblKeysMouseClicked
 
     private void lblPlayerImgMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPlayerImgMouseClicked
-        doorFounded(2);
+        
     }//GEN-LAST:event_lblPlayerImgMouseClicked
 
     private void lblQuitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblQuitMouseClicked
@@ -420,7 +464,28 @@ public class Game extends javax.swing.JFrame {
         salas = lab.getSalas();
         //Enter
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            //movePlayer(player.getPos() + 1);
+            if (salas[player.getPos()].isKey()) {
+                trapKeyDor[player.getPos()].setIcon(null);
+                addKeys();
+            }
+            else if (salas[player.getPos()].isExit()) {
+                if (player.getKeys() == 3) {
+                    int n = JOptionPane.showConfirmDialog(null, "Parabéns você achou a porta e ganhou o jogo! Deseja jogar novamente?", "Fim de Jogo", JOptionPane.YES_NO_OPTION);
+                    if (n == 0) {
+                        this.setVisible(false);
+                        new Home().setVisible(true);
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(null, "Volte sempre.");
+                        System.exit(0);
+                    }
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Você ainda não achou todas as chaves para abrir a porta.");
+                    lblStatus.setText("Você ainda não achou todas as chaves para abrir a porta.");
+                }
+                
+            }
         }
         //Seta Cima
         if (evt.getKeyCode() == KeyEvent.VK_UP) {
@@ -460,7 +525,10 @@ public class Game extends javax.swing.JFrame {
         life2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
         life3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/icons8_Hearts_25px_3.png")));
         
-        personagem[player.getPos()].setIcon(new javax.swing.ImageIcon(getClass().getResource("/labirintoaleatorio/images/playerD.png")));
+        putKeys();
+        putTrap();
+        putDoor();
+        putPlayer();
     }//GEN-LAST:event_lblRefreshMouseClicked
 
     public static void main(String args[]) {

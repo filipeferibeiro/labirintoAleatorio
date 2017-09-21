@@ -18,6 +18,11 @@ public class Labirinto {
             return up;
         }
 
+        public void setExit(boolean exit) {
+            this.exit = exit;
+        }
+        
+        
         public void setUp(boolean up) {
             this.up = up;
         }
